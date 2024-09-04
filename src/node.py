@@ -1,71 +1,42 @@
-'''
-This module provides a fully functional Paxos implementation based on a
-simple heartbeating mechanism.
-'''
-import time
-
-from paxos import practical
-
-from paxos.practical import ProposalID
+from time import time
+from src.proposal import ProposalID
+from src.proposer import Proposer
+from src.acceptor import Acceptor
+from src.learner import Learner
 
 
-class HeartbeatMessenger (practical.Messenger):
+class Node (Proposer, Acceptor, Learner):
+    '''
+    This class supports the common model where each node on a network preforms
+    all three Paxos roles, Proposer, Acceptor, and Learner.
+    '''
 
-    def send_heartbeat(self, leader_proposal_id):
-        '''
-        Sends a heartbeat message to all nodes
-        '''
+    def __init__(self, messenger, node_uid, quorum_size):
+        self.messenger   = messenger
+        self.node_uid    = node_uid
+        self.quorum_size = quorum_size
 
-    def schedule(self, msec_delay, func_obj):
-        '''
-        While leadership is held, this method is called by pulse() to schedule
-        the next call to pulse(). If this method is not overridden appropriately, 
-        subclasses must use the on_leadership_acquired()/on_leadership_lost() callbacks
-        to ensure that pulse() is called every hb_period while leadership is held.
-        '''
 
-    def on_leadership_lost(self):
-        '''
-        Called when loss of leadership is detected
-        '''
+    @property
+    def proposer_uid(self):
+        return self.node_uid
+            
 
-    def on_leadership_change(self, prev_leader_uid, new_leader_uid):
-        '''
-        Called when a change in leadership is detected. Either UID may
-        be None.
-        '''
+    def change_quorum_size(self, quorum_size):
+        self.quorum_size = quorum_size
 
         
-    
-class HeartbeatNode (practical.Node):
-    '''
-    This class implements a Paxos node that provides a reasonable assurance of
-    progress through a simple heartbeating mechanism that is used to detect
-    leader failure and initiate leadership acquisition.
+    def recv_prepare(self, from_uid, proposal_id):
+        self.observe_proposal( from_uid, proposal_id )
+        return super(Node,self).recv_prepare( from_uid, proposal_id )
 
-    If one or more heartbeat messages are not received within the
-    'liveness_window', leadership acquisition will be attempted by sending out
-    phase 1a, Prepare messages. If a quorum of replies acknowledging leadership
-    is received, the node has successfully gained leadership and will begin
-    sending out heartbeat messages. If a quorum is not received, the node will
-    continually send a prepare every 'liveness_window' until either a quorum is
-    established or a heartbeat with a proposal number greater than its own is
-    received. The units for hb_period and liveness_window is seconds and floating
-    point values may be used for sub-second precision.
 
-    Leadership loss is detected by way of receiving a heartbeat message from a proposer
-    with a higher proposal number (which must be obtained through a successful phase 1).
-    Or by receiving a quorum of NACK responses to Accept! messages.
-
-    This process does not modify the basic Paxos algorithm in any way, it merely seeks
-    to ensure recovery from failures in leadership. Consequently, the basic Paxos
-    safety mechanisms remain intact.
-    '''
+class HeartbeatNode (Node):
 
     hb_period       = 1
     liveness_window = 5
 
-    timestamp       = time.time
+    timestamp       = time
 
     
     def __init__(self, messenger, my_uid, quorum_size, leader_uid=None,
@@ -201,5 +172,3 @@ class HeartbeatNode (practical.Node):
             self.messenger.on_leadership_change(self.node_uid, None)
             self.observe_proposal( from_uid, promised_id )
 
-
-    

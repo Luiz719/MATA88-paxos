@@ -1,11 +1,4 @@
-===============
-Extenção da implementção de Tom Cocagne &lt;tom.cocagne@gmail.com&gt;  
-v2.0, January 2013
-url='https://github.com/cocagne/paxos'
-
-
-
-# Implementação do Algoritmo Paxos com Comunicação por Sockets
+# Implementação Automatizada do Algoritmo Paxos com Comunicação por Sockets
 ## Arquitetura do Sistema
 A arquitetura do sistema é composta pelos seguintes componentes principais:
 1. **SocketMessenger**: Responsável pela comunicação entre os nós usando sockets UDP. Essa classe implementa a interface `Messenger` e fornece métodos para enviar e receber mensagens.
