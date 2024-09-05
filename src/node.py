@@ -32,6 +32,26 @@ class Node (Proposer, Acceptor, Learner):
 
 
 class HeartbeatNode (Node):
+    '''
+    This class implements a Paxos node that provides a reasonable assurance of
+    progress through a simple heartbeating mechanism that is used to detect
+    leader failure and initiate leadership acquisition.
+
+    If one or more heartbeat messages are not received within the
+    'liveness_window', leadership acquisition will be attempted by sending out
+    phase 1a, Prepare messages. If a quorum of replies acknowledging leadership
+    is received, the node has successfully gained leadership and will begin
+    sending out heartbeat messages. If a quorum is not received, the node will
+    continually send a prepare every 'liveness_window' until either a quorum is
+    established or a heartbeat with a proposal number greater than its own is
+    received. The units for hb_period and liveness_window is seconds and floating
+    point values may be used for sub-second precision.
+
+    Leadership loss is detected by way of receiving a heartbeat message from a proposer
+    with a higher proposal number (which must be obtained through a successful phase 1).
+    Or by receiving a quorum of NACK responses to Accept! messages.
+
+    '''
 
     hb_period       = 1
     liveness_window = 5

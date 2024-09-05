@@ -67,6 +67,9 @@ def run_node(node_id: tuple, nodes: Dict[str, tuple], quorum_size: int, node_nam
             print(f"Node {node_id.uid} is trying to acquire leadership.")
             node.acquire_leadership()
         elif command == "quit":
+            print(f"Node {node_id.uid} will quit in 5 seconds.")
+            time.sleep(5)
+            print(f"Node {node_id.uid} is quitting now.")
             break
         else:
             time.sleep(5) #wait
