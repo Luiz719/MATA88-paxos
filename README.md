@@ -1,4 +1,4 @@
-Extenção da implementção de Tom Cocagne &lt;tom.cocagne@gmail.com&gt;  
+Extensão da implementção de Tom Cocagne &lt;tom.cocagne@gmail.com&gt;  
 v2.0, January 2013
 url='https://github.com/cocagne/paxos'
 
