@@ -45,7 +45,7 @@ class HeartbeatNode (Node):
         super(HeartbeatNode, self).__init__(messenger, my_uid, quorum_size)
 
         self.leader_uid          = leader_uid
-        self.leader_proposal_id  = ProposalID(1, leader_uid)
+        self.leader_proposal_id  = ProposalID(0, leader_uid)
         self._tlast_hb           = self.timestamp()
         self._tlast_prep         = self.timestamp()
         self._acquiring          = False
