@@ -62,6 +62,7 @@ message = {
 
 1. Certifique-se de ter o Python 3 instalado em sua máquina.
 2. Edite o arquivo `commands.txt` para simular o cenário. Ele conterá a lista de comandos para cada nó, no formato `[Nó]: [Comando]`. Cada linha deve especificar o nome do nó (por exemplo, `A`, `B`, `C`, etc.) seguido de um comando a ser executado. 
+Para o cenário sem falhas descrito no relatório, insira no arquivo os seguintes valores `A: acquire A: propose`. Para o cenário com falha, insira `A: acquire A: propose B: quit C: quit`
 3. Para rodar o programa, rode `$ python main.py --node_count <numero de nós>`. Caso não seja especificado, o número de nós será 3.
 4. Pressione `Ctrl+C` no terminal para encerrar a execução.
 
