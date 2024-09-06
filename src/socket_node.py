@@ -3,12 +3,24 @@ from src.proposal import ProposalID
 
 
 class PaxosNode(HeartbeatNode):
+    '''
+    The `PaxosNode` class extends `HeartbeatNode` and implements message handling methods for the Paxos
+    consensus algorithm.
+    '''
     def __init__(self, messenger, node_uid, quorum_size, leader_uid=None,
                  hb_period=None, liveness_window=None):
         super().__init__(messenger, node_uid, quorum_size, leader_uid, hb_period, liveness_window)
         self.messenger.add_listener(self.handle_message)
 
     def handle_message(self, message):
+        """
+        The function `handle_message` processes different types of messages in paxos
+        based on the message type.
+        
+        :param message: The `handle_message` method is designed to handle different types of messages
+        received by an object. The method takes in a `message` parameter, which is expected to be a
+        dictionary containing "type" (the type of message) and "from" (the uid that sends this message).
+        """
         msg_type = message['type']
         from_uid = message['from']
 
