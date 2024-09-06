@@ -23,6 +23,9 @@ class Node (Proposer, Acceptor, Learner):
             
 
     def change_quorum_size(self, quorum_size):
+        """
+        Sets the quorum size attribute to the specified value.
+        """
         self.quorum_size = quorum_size
 
         
@@ -86,10 +89,18 @@ class HeartbeatNode (Node):
         
         
     def leader_is_alive(self):
+        """
+        Checks if the leader's last heartbeat timestamp is within the
+        liveness window.
+        """
         return self.timestamp() - self._tlast_hb <= self.liveness_window
 
 
     def observed_recent_prepare(self):
+        """
+        Checks if the time elapsed since the last preparation is
+        within 1.5 times the liveness window.
+        """
         return self.timestamp() - self._tlast_prep <= self.liveness_window * 1.5
 
     
